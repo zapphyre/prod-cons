@@ -12,7 +12,7 @@ import java.util.UUID;
 public class UserMapperTest {
 
     @Test
-    void testEntityToDtoMapping() {
+    void testEntityToDtoMapping() { //really in case of _empty_ mappers I don't find this kind of tests to be any useful, but I found some team(members) require it so there you go; in case of mappers that implement mapping logic it's different story tho
         UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
         final Long USER_ID = 3124L;
