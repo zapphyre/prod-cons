@@ -2,11 +2,11 @@ package com.indra.producer.impl;
 
 import com.indra.command.Command;
 import com.indra.command.impl.AddCommand;
+import com.indra.command.impl.DeleteAllCommand;
 import com.indra.command.impl.QueryAllCommand;
 import com.indra.model.dto.UserDTO;
 import com.indra.producer.CommandProducer;
 import com.indra.queue.FIFOQueue;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
@@ -45,7 +45,8 @@ public class ThreadedCommandProducerImpl implements CommandProducer, Runnable {
                 log.debug("queueing new command");
 
                 Command cmd = System.currentTimeMillis() % 2 == 0 ?
-                        createAddCommand() : createQueryCommand();
+                        createAddCommand() : System.currentTimeMillis() % 3 == 0 ?
+                        createDeleteAllCommand() : createQueryCommand();
 
                 fifoQueue.enqueue(cmd);
                 log.info("command added; queue size: " + fifoQueue.size());
@@ -58,6 +59,10 @@ public class ThreadedCommandProducerImpl implements CommandProducer, Runnable {
             if (!active) break;
         }
 
+    }
+
+    private Command createDeleteAllCommand() {
+        return new DeleteAllCommand();
     }
 
     private Command createAddCommand() {

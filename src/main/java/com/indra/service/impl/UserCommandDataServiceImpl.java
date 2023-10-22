@@ -1,18 +1,14 @@
 package com.indra.service.impl;
 
-import com.indra.command.Command;
 import com.indra.db.UserDAO;
 import com.indra.mapper.UserMapper;
 import com.indra.model.dto.UserDTO;
-import com.indra.model.entity.User;
-import com.indra.queue.FIFOQueue;
 import com.indra.service.UserCommandService;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class UserCommandDataServiceImpl implements UserCommandService {
@@ -32,6 +28,6 @@ public class UserCommandDataServiceImpl implements UserCommandService {
 
     @Override
     public boolean deleteAllUsers() {
-        return false;
+        return userDAO.deleteAll() > 0;
     }
 }

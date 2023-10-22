@@ -84,11 +84,28 @@ public class UserDAO {
 
             users = currentSession.createQuery("select U from User U", User.class).list();
 
-            transaction.commit();
+//            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return users;
+    }
+
+    public int deleteAll() {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
+            Transaction transaction = currentSession.beginTransaction();
+
+            int deleteFromUser = currentSession.createQuery("delete from User", User.class).executeUpdate();
+
+            transaction.commit();
+
+            return deleteFromUser;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 }

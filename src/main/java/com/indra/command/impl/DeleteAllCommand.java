@@ -8,6 +8,6 @@ public class DeleteAllCommand implements Command {
 
     @Override
     public StringServiceActionResult execute(UserCommandService usr) {
-        return null;
+        return transformToWritableResult(usr.deleteAllUsers() ? "delete all complete;" : "deleting FAILED");
     }
 }
