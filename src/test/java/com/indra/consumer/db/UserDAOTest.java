@@ -87,46 +87,37 @@ public class UserDAOTest {
 
         Mockito.verify(txLocking, Mockito.times(1)).waitIfTxInProgress(Mockito.any());
     }
-
-    void shouldCommitTransactionAndReleaseTxLockInHappyPath() {
-        TxLocking txLocking = Mockito.mock(TxLocking.class);
-        Mockito.doNothing().when(txLocking).notifyTxLock();
-
-        UserDAO userDAO = new UserDAO(AppSessionFactory.getSessionFactory().getCurrentSession());
-
-        userDAO.save(Mockito.any());
-        userDAO.deleteAll();
-        userDAO.findAll();
-
-        Mockito.verify(txLocking, Mockito.times(3)).notifyTxLock();
-    }
-
     @Test
-    void shouldBeginAndCommitTxOnHappyPath() {
-        MockedStatic<AppSessionFactory> appSessionFactoryMockedStatic = Mockito.mockStatic(AppSessionFactory.class);
-
-        UserDAO userDAO = Mockito.mock(UserDAO.class);
-        SessionFactory sessionFactory = Mockito.mock(SessionFactory.class);
+    void shouldInvokeTxReleaseWhenCurrentTxCompleted() {
         Session sessionMock = Mockito.mock(Session.class);
+        TxLocking txLocking = Mockito.spy(new TxLocking(sessionMock) {});
+
+        Mockito.doNothing().when(txLocking).waitIfTxInProgress(Mockito.any());
         Transaction transactionMock = Mockito.mock(Transaction.class);
 
-//        Mockito.when(userDAO.getHibernateSession()).thenReturn(sessionMock);
+        Mockito.when(transactionMock.isActive()).thenReturn(false);
+        Mockito.when(sessionMock.getTransaction()).thenReturn(transactionMock);
+
+        txLocking.doInTx(Mockito.any());
+
+        Mockito.verify(txLocking, Mockito.times(1)).notifyTxLock();
+    }
+    @Test
+    void shouldInvokeBeginAndCommitOnTxWhenHappyPath() {
+        Session sessionMock = Mockito.mock(Session.class);
+        TxLocking txLocking = Mockito.spy(new TxLocking(sessionMock) {});
+
+        Mockito.doNothing().when(txLocking).waitIfTxInProgress(Mockito.any());
+        Transaction transactionMock = Mockito.mock(Transaction.class);
+
         Mockito.when(transactionMock.isActive()).thenReturn(false);
         Mockito.when(sessionMock.getTransaction()).thenReturn(transactionMock);
         Mockito.when(sessionMock.beginTransaction()).thenReturn(transactionMock);
-        Mockito.when(sessionFactory.getCurrentSession()).thenReturn(sessionMock);
 
-//        Mockito.when(sessionMock.createQuery(Mockito.<String>any())).
-        Mockito.doNothing().when(sessionMock).createQuery(Mockito.<String>any());
+        txLocking.doInTx(s -> s.save(User.builder().build()));
 
-        appSessionFactoryMockedStatic.when(AppSessionFactory::getSessionFactory).thenReturn(sessionFactory);
-
-        UserDAO realDao = new UserDAO(sessionMock);
-        realDao.save(User.builder().build());
-        realDao.findAll();
-        realDao.deleteAll();
-
-        Mockito.verify(sessionMock, Mockito.times(3)).beginTransaction();
-        Mockito.verify(transactionMock, Mockito.times(3)).commit();
+        Mockito.verify(sessionMock, Mockito.times(1)).beginTransaction();
+        Mockito.verify(transactionMock, Mockito.times(1)).commit();
     }
+
 }
