@@ -37,15 +37,12 @@ public class ThreadedCommandProducerImpl implements CommandProducer, Runnable {
     public void produce() {
 
         while (active) {
-//            System.out.println("pre buffer size: " + preBuffer.size());
-//            if (preBuffer.isEmpty()) continue;
-//
-//            Command cmd = preBuffer.poll();
             try {
                 log.debug("queueing new command");
 
                 Command cmd = System.currentTimeMillis() % 2 == 0 ?
-                        createAddCommand() : System.currentTimeMillis() % 3 == 0 ?
+                        createAddCommand() :
+                System.currentTimeMillis() % 3 == 0 ?
                         createDeleteAllCommand() : createQueryCommand();
 
                 fifoQueue.enqueue(cmd);

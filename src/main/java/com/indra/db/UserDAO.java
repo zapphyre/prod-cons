@@ -20,6 +20,8 @@ public class UserDAO {
     private StandardServiceRegistry registry;
     private SessionFactory sessionFactory;
 
+    private Object TX_LOCK = new Object();
+
     public UserDAO() {
         sessionFactory = getSessionFactory();
     }
@@ -60,9 +62,12 @@ public class UserDAO {
 
         try {
             Session currentSession = sessionFactory.getCurrentSession();
+
+            if (currentSession.getTransaction().isActive()) waitTxLock();
+
             transaction = currentSession.beginTransaction();
 
-            user.setId((Long) currentSession.save(user));
+            currentSession.persist(user);
 
             transaction.commit();
         } catch (Exception e) {
@@ -72,6 +77,7 @@ public class UserDAO {
             log.error("cannot commit transaction", e);
         }
 
+        notifyTxLock();
         return user;
     }
 
@@ -80,32 +86,56 @@ public class UserDAO {
 
         try {
             Session currentSession = sessionFactory.getCurrentSession();
+
+            if (currentSession.getTransaction().isActive())
+                waitTxLock();
+
             Transaction transaction = currentSession.beginTransaction();
 
             users = currentSession.createQuery("select U from User U", User.class).list();
 
-//            transaction.commit();
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        notifyTxLock();
         return users;
     }
 
     public int deleteAll() {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
+            if (currentSession.getTransaction().isActive()) waitTxLock();
+
             Transaction transaction = currentSession.beginTransaction();
 
-            int deleteFromUser = currentSession.createQuery("delete from User", User.class).executeUpdate();
+            int deleted = currentSession.createQuery("delete from User").executeUpdate();
 
             transaction.commit();
 
-            return deleteFromUser;
+            return deleted;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        notifyTxLock();
         return 0;
+    }
+
+    private void waitTxLock() {
+        synchronized (TX_LOCK) {
+            try {
+                TX_LOCK.wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void notifyTxLock() {
+        synchronized (TX_LOCK) {
+            TX_LOCK.notify();
+        }
     }
 }
