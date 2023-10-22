@@ -14,7 +14,7 @@ public class AddCommand implements Command {
     private final UserDTO payload;
 
     @Override
-    public StringServiceActionResult execute(UserCommandService usr) {
+    public StringServiceActionResult execute(UserCommandService usr) { // really to justify 'I' form SOLID principles, the service should implement 3 different interfaces owned by the producer module (add, query, delete) but I find it sufficient to demonstrate application objective this way now
         boolean b = usr.addUser(payload);
 
         return transformToWritableResult(b ? "user added" : "add command failed");

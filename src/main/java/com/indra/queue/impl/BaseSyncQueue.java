@@ -3,7 +3,7 @@ package com.indra.queue.impl;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class BaseSyncQueue {
+abstract class BaseSyncQueue { // abstract modifier here is not really necessary; however it notifies programmer this class should not be instantiated on it's own
     protected final int maxSize;
     private final Object IS_NOT_FULL = new Object();
     private final Object IS_NOT_EMPTY = new Object();

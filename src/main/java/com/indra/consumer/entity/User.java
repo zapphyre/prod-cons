@@ -18,6 +18,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-//    private UUID uuid;
+    private UUID uuid;
     private String name;
 }

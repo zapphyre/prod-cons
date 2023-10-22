@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 @Slf4j
 @RequiredArgsConstructor
-public abstract class TxLocking {
+ abstract class TxLocking { // abstract modifier here is not really necessary; however it notifies programmer this class should not be instantiated on it's own
 
     private final SessionFactory sessionFactory;
     private final Object TX_LOCK = new Object();

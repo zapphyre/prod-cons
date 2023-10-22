@@ -4,11 +4,8 @@ import com.indra.consumer.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-
-import java.util.List;
 
 public class TxLockingTest {
 
@@ -29,6 +26,7 @@ public class TxLockingTest {
 
         Mockito.verify(txLocking, Mockito.times(1)).waitIfTxInProgress(Mockito.any());
     }
+
     @Test
     void shouldInvokeTxReleaseWhenCurrentTxCompleted() {
         SessionFactory sessionFactory = Mockito.mock(SessionFactory.class);
