@@ -3,6 +3,7 @@ package com.indra.consumer.db;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.function.Function;
@@ -11,19 +12,23 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public abstract class TxLocking {
 
-    private final Session session;
+    private final SessionFactory sessionFactory;
     private final Object TX_LOCK = new Object();
+
+    Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
+    }
 
     <R> R doInTx(Function<Session, R> stmt) {
         Transaction transaction = null;
         R res = null;
 
         try {
-            waitIfTxInProgress(session);
+            waitIfTxInProgress(getCurrentSession());
 
-            transaction = session.beginTransaction();
+            transaction = getCurrentSession().beginTransaction();
 
-            res = stmt.apply(session);
+            res = stmt.apply(getCurrentSession());
 
             transaction.commit();
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.indra.consumer.db;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -11,6 +12,10 @@ public final class AppSessionFactory {
     private static SessionFactory sessionFactory;
 
     private AppSessionFactory() {
+    }
+
+    static Session getHibernateSession() {
+        return getSessionFactory().getCurrentSession();
     }
 
     public static SessionFactory getSessionFactory() {

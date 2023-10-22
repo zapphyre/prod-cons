@@ -5,6 +5,7 @@ import com.indra.consumer.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.LinkedList;
@@ -15,8 +16,8 @@ import java.util.function.Function;
 public class UserDAO extends TxLocking {
 
     //it's parametrized just for the sake of testing, static fields make things tricky and terrible
-    public UserDAO(Session session) {
-        super(session);
+    public UserDAO(SessionFactory sessionFactory) {
+        super(sessionFactory);
     }
 
     public User save(User user) {
