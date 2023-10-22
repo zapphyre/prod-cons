@@ -2,67 +2,35 @@ package com.indra.consumer.db;
 
 
 import com.indra.consumer.entity.User;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 @Slf4j
+@RequiredArgsConstructor
 public class UserDAO {
 
-//    private StandardServiceRegistry registry;
-//    private SessionFactory sessionFactory;
+    private final TxLocking txLocking;
 
-    private Object TX_LOCK = new Object();
+    Session getHibernateSession() {
+        return AppSessionFactory.getSessionFactory().getCurrentSession();
+    }
 
-//    public UserDAO() {
-//        sessionFactory = getSessionFactory();
-//    }
-//
-//    public SessionFactory getSessionFactory() {
-//        if (sessionFactory == null) {
-//            try {
-//                // Create registry
-//                registry = new StandardServiceRegistryBuilder().configure().build();
-//
-//                // Create MetadataSources
-//                MetadataSources sources = new MetadataSources(registry);
-//
-//                // Create Metadata
-//                Metadata metadata = sources.getMetadataBuilder().build();
-//
-//                // Create SessionFactory
-//                sessionFactory = metadata.getSessionFactoryBuilder().build();
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                if (registry != null) {
-//                    StandardServiceRegistryBuilder.destroy(registry);
-//                }
-//            }
-//        }
-//        return sessionFactory;
-//    }
-//
-//    public void shutdown() {
-//        if (registry != null) {
-//            StandardServiceRegistryBuilder.destroy(registry);
-//        }
-//    }
-
-    public User save(User user) {
+    protected  <R> R doInTx(Function<Session, R> stmt) {
         Transaction transaction = null;
-
+        R res = null;
         try {
-            Session currentSession = AppSessionFactory.getSessionFactory().getCurrentSession();
-
-            if (currentSession.getTransaction().isActive()) waitTxLock();
+            Session currentSession = getHibernateSession();
+            txLocking.waitIfTxInProgress(currentSession);
 
             transaction = currentSession.beginTransaction();
 
-            currentSession.persist(user);
+            res = stmt.apply(currentSession);
 
             transaction.commit();
         } catch (Exception e) {
@@ -72,7 +40,15 @@ public class UserDAO {
             log.error("cannot commit save transaction", e);
         }
 
-        notifyTxLock();
+        txLocking.notifyTxLock();
+
+        return res;
+    }
+
+    public User save(User user) {
+
+        doInTx(session -> session.save(user)); // i could cast the result to Long and assign it to entity as it's id just for a sake to return something, but it modifies the parameter anyway...
+
         return user;
     }
 
@@ -82,8 +58,7 @@ public class UserDAO {
         try {
             Session currentSession = AppSessionFactory.getSessionFactory().getCurrentSession();
 
-            if (currentSession.getTransaction().isActive())
-                waitTxLock();
+            txLocking.waitIfTxInProgress(currentSession);
 
             Transaction transaction = currentSession.beginTransaction();
 
@@ -94,7 +69,7 @@ public class UserDAO {
             log.error("cannot fetch results", e);
         }
 
-        notifyTxLock();
+        txLocking.notifyTxLock();
         return users;
     }
 
@@ -102,7 +77,7 @@ public class UserDAO {
         int affectedCnt = -1;
         try {
             Session currentSession = AppSessionFactory.getSessionFactory().getCurrentSession();
-            if (currentSession.getTransaction().isActive()) waitTxLock();
+            txLocking.waitIfTxInProgress(currentSession);
 
             Transaction transaction = currentSession.beginTransaction();
 
@@ -115,23 +90,9 @@ public class UserDAO {
             log.error("cannot commit delete transaction", e);
         }
 
-        notifyTxLock();
+        txLocking.notifyTxLock();
         return affectedCnt;
     }
 
-    private void waitTxLock() {
-        synchronized (TX_LOCK) {
-            try {
-                TX_LOCK.wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 
-    private void notifyTxLock() {
-        synchronized (TX_LOCK) {
-            TX_LOCK.notify();
-        }
-    }
 }

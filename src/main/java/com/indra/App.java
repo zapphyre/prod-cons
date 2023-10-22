@@ -1,6 +1,7 @@
 package com.indra;
 
 import com.indra.consumer.db.AppSessionFactory;
+import com.indra.consumer.db.TxLocking;
 import com.indra.producer.command.Command;
 import com.indra.consumer.CommandConsumer;
 import com.indra.consumer.impl.UserDBCommandConsumerImpl;
@@ -15,7 +16,7 @@ import com.indra.consumer.service.impl.UserCommandDataServiceImpl;
 public class App {
     public static void main(String[] args) {
         FIFOQueue<Command, Boolean> queue = new SyncFIFOQueueImpl(5);
-        UserDAO userDAO = new UserDAO();
+        UserDAO userDAO = new UserDAO(new TxLocking());
 
         UserCommandService userCommandService = new UserCommandDataServiceImpl(userDAO);
 
