@@ -1,6 +1,6 @@
 package com.indra.queue.impl;
 
-import com.indra.command.Command;
+import com.indra.producer.command.Command;
 import com.indra.queue.FIFOQueue;
 
 import java.util.LinkedList;
@@ -16,10 +16,8 @@ public class SyncFIFOQueueImpl extends BaseSyncQueue implements FIFOQueue<Comman
 
     @Override
     public Boolean enqueue(Command command) throws InterruptedException {
-        if (queue.size() >= maxSize) {
+        if (queue.size() >= maxSize)
             waitIsNotFull();
-//            notifyIsNotEmpty();
-        }
 
         final var res = queue.add(command);
 
@@ -44,6 +42,4 @@ public class SyncFIFOQueueImpl extends BaseSyncQueue implements FIFOQueue<Comman
     public int size() {
         return queue.size();
     }
-
-
 }

@@ -31,6 +31,7 @@ public abstract class BaseSyncQueue {
         synchronized (IS_NOT_EMPTY) {
             log.debug("waiting not empty");
             IS_NOT_EMPTY.wait();
+            log.debug("queue contains elements again");
         }
     }
 

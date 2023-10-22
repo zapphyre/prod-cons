@@ -1,9 +1,9 @@
 package com.indra.producer.impl;
 
-import com.indra.command.Command;
-import com.indra.command.impl.AddCommand;
-import com.indra.command.impl.DeleteAllCommand;
-import com.indra.command.impl.QueryAllCommand;
+import com.indra.producer.command.Command;
+import com.indra.producer.command.impl.AddCommand;
+import com.indra.producer.command.impl.DeleteAllCommand;
+import com.indra.producer.command.impl.QueryAllCommand;
 import com.indra.model.dto.UserDTO;
 import com.indra.producer.CommandProducer;
 import com.indra.queue.FIFOQueue;
@@ -15,13 +15,13 @@ import java.util.Queue;
 import java.util.UUID;
 
 @Slf4j
-public class ThreadedCommandProducerImpl implements CommandProducer, Runnable {
+public class UserDBCommandProducerImpl implements CommandProducer, Runnable {
 
     private final FIFOQueue<Command, Boolean> fifoQueue;
     private final Queue<Command> preBuffer;
     private boolean active = false;
 
-    public ThreadedCommandProducerImpl(FIFOQueue<Command, Boolean> fifoQueue) {
+    public UserDBCommandProducerImpl(FIFOQueue<Command, Boolean> fifoQueue) {
         this.fifoQueue = fifoQueue;
         this.preBuffer = new LinkedList<>();
     }

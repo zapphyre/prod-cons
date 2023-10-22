@@ -1,6 +1,7 @@
 package com.indra.db;
 
-import com.indra.model.entity.User;
+import com.indra.consumer.db.UserDAO;
+import com.indra.consumer.entity.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

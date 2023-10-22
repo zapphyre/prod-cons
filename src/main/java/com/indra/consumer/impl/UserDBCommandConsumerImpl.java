@@ -1,17 +1,16 @@
 package com.indra.consumer.impl;
 
-import com.indra.command.Command;
+import com.indra.producer.command.Command;
 import com.indra.consumer.CommandConsumer;
-import com.indra.model.pojo.StringServiceActionResult;
+import com.indra.producer.pojo.StringServiceActionResult;
 import com.indra.queue.FIFOQueue;
-import com.indra.service.UserCommandService;
+import com.indra.consumer.service.UserCommandService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class UserDBCommandConsumer implements CommandConsumer {
+public class UserDBCommandConsumerImpl implements CommandConsumer {
 
     private final FIFOQueue<Command, Boolean> fifoQueue;
     private final UserCommandService userCommandService;
@@ -19,6 +18,8 @@ public class UserDBCommandConsumer implements CommandConsumer {
 
     @Override
     public boolean consume() {
+        boolean failed = false;
+
         while (active) {
             try {
                 Command cmd = fifoQueue.pollNext();
@@ -27,12 +28,13 @@ public class UserDBCommandConsumer implements CommandConsumer {
                 log.info("command executed; queue size: " + fifoQueue.size());
             } catch (InterruptedException e) {
                 log.warn("error processing command");
+                failed = true;
             }
 
             if (!active) break;
         }
 
-        return false;
+        return failed;
     }
 
     @Override
@@ -50,6 +52,9 @@ public class UserDBCommandConsumer implements CommandConsumer {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        this.consume();
+
+        boolean failed = this.consume();
+
+        log.info(failed ? "consumer encountered errors while processing" : "consuming went well");
     }
 }

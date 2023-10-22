@@ -1,4 +1,4 @@
-package com.indra.db;
+package com.indra.consumer.db;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
@@ -6,7 +6,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-public class AppSessionFactory {
+public final class AppSessionFactory {
     private static StandardServiceRegistry registry;
     private static SessionFactory sessionFactory;
 

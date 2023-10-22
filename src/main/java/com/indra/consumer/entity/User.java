@@ -1,4 +1,4 @@
-package com.indra.model.entity;
+package com.indra.consumer.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

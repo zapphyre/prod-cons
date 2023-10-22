@@ -1,8 +1,8 @@
-package com.indra.command;
+package com.indra.producer.command;
 
 import com.indra.model.dto.UserDTO;
-import com.indra.model.pojo.StringServiceActionResult;
-import com.indra.service.UserCommandService;
+import com.indra.producer.pojo.StringServiceActionResult;
+import com.indra.consumer.service.UserCommandService;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public interface Command {
 
     default StringServiceActionResult transformToWritableResult(String action, int listSize) {
         StringServiceActionResult stringServiceActionResult = new StringServiceActionResult();
-        stringServiceActionResult.addToWriter(action + " complete;" + "listSize is: " + listSize);
+        stringServiceActionResult.addToWriter(action + " complete;  " + "listSize is: " + listSize);
 
         return stringServiceActionResult;
     }

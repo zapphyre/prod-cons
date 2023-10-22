@@ -1,9 +1,9 @@
-package com.indra.service.impl;
+package com.indra.consumer.service.impl;
 
-import com.indra.db.UserDAO;
-import com.indra.mapper.UserMapper;
+import com.indra.consumer.db.UserDAO;
+import com.indra.model.mapper.UserMapper;
 import com.indra.model.dto.UserDTO;
-import com.indra.service.UserCommandService;
+import com.indra.consumer.service.UserCommandService;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 
@@ -27,7 +27,7 @@ public class UserCommandDataServiceImpl implements UserCommandService {
     }
 
     @Override
-    public boolean deleteAllUsers() {
-        return userDAO.deleteAll() > 0;
+    public int deleteAllUsers() {
+        return userDAO.deleteAll();
     }
 }

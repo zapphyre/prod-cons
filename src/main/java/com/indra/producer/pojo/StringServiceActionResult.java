@@ -1,4 +1,4 @@
-package com.indra.model.pojo;
+package com.indra.producer.pojo;
 
 import com.indra.model.dto.UserDTO;
 

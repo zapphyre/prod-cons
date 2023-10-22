@@ -1,6 +1,6 @@
 package com.indra.producer;
 
-import com.indra.command.Command;
+import com.indra.producer.command.Command;
 
 import java.util.List;
 

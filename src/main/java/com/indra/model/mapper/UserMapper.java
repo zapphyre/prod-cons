@@ -1,7 +1,7 @@
-package com.indra.mapper;
+package com.indra.model.mapper;
 
 import com.indra.model.dto.UserDTO;
-import com.indra.model.entity.User;
+import com.indra.consumer.entity.User;
 import org.mapstruct.Mapper;
 
 import java.util.List;
