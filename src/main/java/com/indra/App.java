@@ -16,7 +16,7 @@ import com.indra.consumer.service.impl.UserCommandDataServiceImpl;
 public class App {
     public static void main(String[] args) {
         FIFOQueue<Command, Boolean> queue = new SyncFIFOQueueImpl(5);
-        UserDAO userDAO = new UserDAO(new TxLocking());
+        UserDAO userDAO = new UserDAO(AppSessionFactory.getSessionFactory().getCurrentSession());
 
         UserCommandService userCommandService = new UserCommandDataServiceImpl(userDAO);
 

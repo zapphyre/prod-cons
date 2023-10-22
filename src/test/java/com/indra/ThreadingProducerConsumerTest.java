@@ -21,7 +21,7 @@ public class ThreadingProducerConsumerTest {
     @Test
     void testProduceConsumeReporting() throws InterruptedException {
         FIFOQueue<Command, Boolean> queue = new SyncFIFOQueueImpl(5);
-        UserDAO userDAO = new UserDAO(new TxLocking());
+        UserDAO userDAO = new UserDAO(AppSessionFactory.getSessionFactory().getCurrentSession());
 
         UserCommandService userCommandService = new UserCommandDataServiceImpl(userDAO);
 
