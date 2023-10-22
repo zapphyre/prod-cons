@@ -2,7 +2,6 @@ package com.indra.db;
 
 
 import com.indra.model.entity.User;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,10 +19,9 @@ public class UserDAO {
 
     private StandardServiceRegistry registry;
     private SessionFactory sessionFactory;
-    private Session session;
 
     public UserDAO() {
-        this.session = getSessionFactory().getCurrentSession();
+        sessionFactory = getSessionFactory();
     }
 
     public SessionFactory getSessionFactory() {
@@ -61,9 +59,10 @@ public class UserDAO {
         Transaction transaction = null;
 
         try {
-            transaction = session.beginTransaction();
+            Session currentSession = sessionFactory.getCurrentSession();
+            transaction = currentSession.beginTransaction();
 
-            user.setId((Long) session.save(user));
+            user.setId((Long) currentSession.save(user));
 
             transaction.commit();
         } catch (Exception e) {
@@ -80,7 +79,12 @@ public class UserDAO {
         List<User> users = new LinkedList<>();
 
         try {
-            users = session.createQuery("select U from User U", User.class).list();
+            Session currentSession = sessionFactory.getCurrentSession();
+            Transaction transaction = currentSession.beginTransaction();
+
+            users = currentSession.createQuery("select U from User U", User.class).list();
+
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
