@@ -1,7 +1,6 @@
 package com.indra.db.repository;
 
 
-import com.indra.db.Transactional;
 import com.indra.db.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
@@ -9,7 +8,7 @@ import org.hibernate.SessionFactory;
 import java.util.List;
 
 @Slf4j
-public class UserDAO extends Transactional {
+public class UserDAO extends TransactionalDAO {
 
     public UserDAO(SessionFactory sessionFactory) {
         super(sessionFactory);

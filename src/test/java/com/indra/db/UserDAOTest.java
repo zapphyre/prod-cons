@@ -1,4 +1,4 @@
-package com.indra.consumer.db;
+package com.indra.db;
 
 import com.indra.db.AppSessionFactory;
 import com.indra.db.repository.UserDAO;

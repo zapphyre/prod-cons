@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 @Slf4j
 @RequiredArgsConstructor
-abstract class Transactional { // abstract modifier here is not really necessary; however it notifies programmer this class should not be instantiated on it's own
+abstract class TransactionalDAO { // abstract modifier here is not really necessary; however it notifies programmer this class should not be instantiated on it's own
 
     private final SessionFactory sessionFactory;
     private final static Object TX_LOCK = new Object();

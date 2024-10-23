@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UserCommandDataServiceImplTest {
 
@@ -23,9 +24,9 @@ public class UserCommandDataServiceImplTest {
         Mockito.when(userDAO.save(Mockito.any())).thenReturn(saved);
 
         UserCommandDataServiceImpl service = new UserCommandDataServiceImpl(userDAO);
-        boolean isAdded = service.addUser(UserDTO.builder().build());
+        UserDTO dto = service.addUser(UserDTO.builder().build());
 
-        Assertions.assertTrue(isAdded);
+        Assertions.assertTrue(Objects.nonNull(dto.getId()));
     }
 
     @Test
@@ -35,9 +36,9 @@ public class UserCommandDataServiceImplTest {
         Mockito.when(userDAO.save(Mockito.any())).thenReturn(null);
 
         UserCommandDataServiceImpl service = new UserCommandDataServiceImpl(userDAO);
-        boolean isAdded = service.addUser(UserDTO.builder().build());
+        UserDTO dto = service.addUser(UserDTO.builder().build());
 
-        Assertions.assertFalse(isAdded);
+        Assertions.assertTrue(Objects.isNull(dto));
     }
 
     @Test
