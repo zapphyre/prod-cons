@@ -1,6 +1,7 @@
 package com.indra.consumer.db;
 
-import com.indra.consumer.entity.User;
+import com.indra.db.Transactional;
+import com.indra.db.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,7 +14,7 @@ public class TxLockingTest {
     void shouldInvokeTxWaitWhenCurrentTxIsActive() {
         SessionFactory sessionFactory = Mockito.mock(SessionFactory.class);
         Session sessionMock = Mockito.mock(Session.class);
-        TxLocking txLocking = Mockito.spy(new TxLocking(sessionFactory) {});
+        Transactional txLocking = Mockito.spy(new Transactional(sessionFactory) {});
 
         Mockito.doNothing().when(txLocking).waitIfTxInProgress(Mockito.any());
         Transaction transactionMock = Mockito.mock(Transaction.class);
@@ -31,7 +32,7 @@ public class TxLockingTest {
     void shouldInvokeTxReleaseWhenCurrentTxCompleted() {
         SessionFactory sessionFactory = Mockito.mock(SessionFactory.class);
         Session sessionMock = Mockito.mock(Session.class);
-        TxLocking txLocking = Mockito.spy(new TxLocking(sessionFactory) {});
+        Transactional txLocking = Mockito.spy(new Transactional(sessionFactory) {});
 
         Mockito.doNothing().when(txLocking).waitIfTxInProgress(Mockito.any());
         Transaction transactionMock = Mockito.mock(Transaction.class);
@@ -49,7 +50,7 @@ public class TxLockingTest {
     void shouldInvokeBeginAndCommitOnTxWhenHappyPath() {
         SessionFactory sessionFactory = Mockito.mock(SessionFactory.class);
         Session sessionMock = Mockito.mock(Session.class);
-        TxLocking txLocking = Mockito.spy(new TxLocking(sessionFactory) {});
+        Transactional txLocking = Mockito.spy(new Transactional(sessionFactory) {});
 
         Mockito.doNothing().when(txLocking).waitIfTxInProgress(Mockito.any());
         Transaction transactionMock = Mockito.mock(Transaction.class);

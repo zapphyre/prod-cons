@@ -2,7 +2,7 @@ package com.indra.producer.command.impl;
 
 import com.indra.producer.command.Command;
 import com.indra.producer.pojo.StringServiceActionResult;
-import com.indra.consumer.service.UserCommandService;
+import com.indra.service.UserCommandService;
 
 public class DeleteAllCommand implements Command {
 

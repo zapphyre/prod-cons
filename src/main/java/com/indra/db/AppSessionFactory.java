@@ -1,4 +1,4 @@
-package com.indra.consumer.db;
+package com.indra.db;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

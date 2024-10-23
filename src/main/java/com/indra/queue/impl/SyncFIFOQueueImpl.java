@@ -19,7 +19,7 @@ public class SyncFIFOQueueImpl extends BaseSyncQueue implements FIFOQueue<Comman
         if (queue.size() >= maxSize)
             waitIsNotFull();
 
-        final var res = queue.add(command);
+        final boolean res = queue.add(command);
 
         notifyIsNotEmpty();
 

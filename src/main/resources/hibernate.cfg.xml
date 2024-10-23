@@ -24,6 +24,6 @@
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
         <property name="hibernate.show_sql">false</property>
 
-        <mapping class="com.indra.consumer.entity.User" />
+        <mapping class="com.indra.db.entity.User" />
     </session-factory>
 </hibernate-configuration>

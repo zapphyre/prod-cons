@@ -3,7 +3,7 @@ package com.indra.producer.command.impl;
 import com.indra.producer.command.Command;
 import com.indra.model.dto.UserDTO;
 import com.indra.producer.pojo.StringServiceActionResult;
-import com.indra.consumer.service.UserCommandService;
+import com.indra.service.UserCommandService;
 
 import java.util.List;
 

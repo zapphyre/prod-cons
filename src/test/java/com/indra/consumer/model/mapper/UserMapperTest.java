@@ -1,6 +1,6 @@
 package com.indra.consumer.model.mapper;
 
-import com.indra.consumer.entity.User;
+import com.indra.db.entity.User;
 import com.indra.model.dto.UserDTO;
 import com.indra.model.mapper.UserMapper;
 import org.junit.jupiter.api.Assertions;

@@ -1,11 +1,11 @@
 package com.indra.producer.impl;
 
+import com.indra.model.dto.UserDTO;
+import com.indra.producer.CommandProducer;
 import com.indra.producer.command.Command;
 import com.indra.producer.command.impl.AddCommand;
 import com.indra.producer.command.impl.DeleteAllCommand;
 import com.indra.producer.command.impl.QueryAllCommand;
-import com.indra.model.dto.UserDTO;
-import com.indra.producer.CommandProducer;
 import com.indra.queue.FIFOQueue;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,9 +41,10 @@ public class UserDBCommandProducerImpl implements CommandProducer, Runnable {
                 log.debug("queueing new command");
 
                 Command cmd = System.currentTimeMillis() % 2 == 0 ?
-                        createAddCommand() :
-                System.currentTimeMillis() % 3 == 0 ?
-                        createDeleteAllCommand() : createQueryCommand();
+                        System.currentTimeMillis() % 3 == 0 ?
+                                createDeleteAllCommand() :
+                                createQueryCommand() :
+                        createAddCommand();
 
                 fifoQueue.enqueue(cmd);
                 log.info("command added; queue size: " + fifoQueue.size());

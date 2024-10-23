@@ -1,11 +1,11 @@
 package com.indra;
 
 import com.indra.consumer.CommandConsumer;
-import com.indra.consumer.db.AppSessionFactory;
-import com.indra.consumer.db.UserDAO;
+import com.indra.db.AppSessionFactory;
+import com.indra.db.repository.UserDAO;
 import com.indra.consumer.impl.UserDBCommandConsumerImpl;
-import com.indra.consumer.service.UserCommandService;
-import com.indra.consumer.service.impl.UserCommandDataServiceImpl;
+import com.indra.service.UserCommandService;
+import com.indra.service.impl.UserCommandDataServiceImpl;
 import com.indra.producer.CommandProducer;
 import com.indra.producer.command.Command;
 import com.indra.producer.impl.UserDBCommandProducerImpl;
@@ -38,5 +38,6 @@ public class App {
         consumer.stop();
 
         AppSessionFactory.shutdown();
+        System.exit(0);
     }
 }

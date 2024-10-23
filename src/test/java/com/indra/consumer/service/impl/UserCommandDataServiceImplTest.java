@@ -1,11 +1,11 @@
 package com.indra.consumer.service.impl;
 
-import com.indra.consumer.db.UserDAO;
-import com.indra.consumer.entity.User;
+import com.indra.db.repository.UserDAO;
+import com.indra.db.entity.User;
 import com.indra.model.dto.UserDTO;
+import com.indra.service.impl.UserCommandDataServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.List;

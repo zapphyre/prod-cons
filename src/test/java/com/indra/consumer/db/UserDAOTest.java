@@ -1,13 +1,10 @@
 package com.indra.consumer.db;
 
-import com.indra.consumer.entity.User;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import com.indra.db.AppSessionFactory;
+import com.indra.db.repository.UserDAO;
+import com.indra.db.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.util.List;
 

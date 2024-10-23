@@ -4,7 +4,7 @@ import com.indra.producer.command.Command;
 import com.indra.consumer.CommandConsumer;
 import com.indra.producer.pojo.StringServiceActionResult;
 import com.indra.queue.FIFOQueue;
-import com.indra.consumer.service.UserCommandService;
+import com.indra.service.UserCommandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,8 +22,7 @@ public class UserDBCommandConsumerImpl implements CommandConsumer {
 
         while (active) {
             try {
-                Command cmd = fifoQueue.pollNext();
-                StringServiceActionResult actionResult = cmd.execute(userCommandService);
+                StringServiceActionResult actionResult = fifoQueue.pollNext().execute(userCommandService);
                 log.info(actionResult.reportAll());
                 log.info("command executed; queue size: " + fifoQueue.size());
             } catch (InterruptedException e) {
@@ -47,11 +46,11 @@ public class UserDBCommandConsumerImpl implements CommandConsumer {
     public void run() {
         this.active = true;
 
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            Thread.sleep(300);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
         boolean failed = this.consume();
 

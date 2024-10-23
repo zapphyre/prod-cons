@@ -1,17 +1,15 @@
-package com.indra.consumer.entity;
+package com.indra.db.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
 
+@Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@Getter
-@Setter
 @Table(name = "SUSER")
 public class User {
 
